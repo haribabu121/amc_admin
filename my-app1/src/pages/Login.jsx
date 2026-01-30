@@ -1,5 +1,4 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -116,13 +115,12 @@ export default function Login() {
         { withCredentials: true }
       );
 
-      Cookies.set("auth", "true", { expires: 1 });
-
       const role = res.data.Role;
 
-      if (role === "admin") navigate("/dashboard", { replace: true });
-      // else if (role === "staff") navigate("/staff");
-      // else if (role === "customer") navigate("/customer");
+      if (role === "admin") {
+        navigate("/dashboard", { replace: true });
+        alert("successfully logged in")
+      }
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
     }
@@ -169,13 +167,6 @@ export default function Login() {
           >
             Login
           </button>
-
-          <a
-            href="/register"
-            className="text-sm text-blue-600 hover:underline mt-4 block text-center"
-          >
-            Don't have an account? Register
-          </a>
         </div>
       </div>
     </div>

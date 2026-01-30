@@ -6,7 +6,7 @@ export const createService = (req, res) => {
 
   const sql = `
     INSERT INTO services 
-    (service_name,  service_cost , service_date,  service_type)
+    (service_name,  service_cost ,service_date,  service_type)
     VALUES (?, ?, ?, ?)
   `;
 

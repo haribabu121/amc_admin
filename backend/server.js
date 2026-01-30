@@ -7,6 +7,8 @@ import authRoutes from "./routes/auth.routes.js";
 import staffRoutes from "./routes/staff.routes.js";
 import amcRoutes from "./routes/amc.routes.js";
 import serviceRoutes from "./routes/service.route.js";
+import customerRoutes from "./routes/customer.routes.js"
+import updateamc2 from "./routes/updateamc.routes.js";
 
 dotenv.config();
 
@@ -42,6 +44,21 @@ app.use("/api", authRoutes);
 app.use("/api/staff", staffRoutes);
 app.use("/api/amc", amcRoutes); // AMC routes
 app.use("/api/service", serviceRoutes); // Service routes
+app.use("/api/customer",customerRoutes);
+app.use("/api/amc-actions",updateamc2);
+
+// Debug endpoint
+app.get("/api/debug/pdf-path", (req, res) => {
+  const path = require("path");
+  const fs = require("fs");
+  const filePath = path.join(process.cwd(), "config", "Annual Maintanance Contract.pdf");
+  res.json({
+    cwd: process.cwd(),
+    filePath: filePath,
+    exists: fs.existsSync(filePath),
+    files: fs.readdirSync(path.join(process.cwd(), "config"))
+  });
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on http://localhost:${process.env.PORT}`);

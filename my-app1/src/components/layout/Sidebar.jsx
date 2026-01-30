@@ -1,8 +1,6 @@
-import {
-  FiHome,
-  FiUsers,
-  FiChevronDown,
-} from "react-icons/fi";
+import { FiHome, FiUsers, FiChevronDown } from "react-icons/fi";
+import { BiPowerOff } from "react-icons/bi";
+
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { HiOutlineWrench } from "react-icons/hi2";
 import { useState } from "react";
@@ -11,6 +9,7 @@ export default function Sidebar({ setActiveView, activeView }) {
   const [staffOpen, setStaffOpen] = useState(false);
   const [amcOpen, setAmcOpen] = useState(false);
   const [serviceOpen, setServiceOpen] = useState(false);
+  const [customerServiceOpen, setCustomerServiceOpen] = useState(false);
 
   return (
     <aside className="w-64 bg-white shadow h-screen fixed">
@@ -92,7 +91,7 @@ export default function Sidebar({ setActiveView, activeView }) {
         </div>
       )}
 
-      {/* SERVICE DROPDOWN */}
+      {/* SERVICE (ADMIN) */}
       <button
         onClick={() => setServiceOpen(!serviceOpen)}
         className="w-full px-4 py-2 flex justify-between hover:bg-gray-100 text-gray-600"
@@ -122,6 +121,56 @@ export default function Sidebar({ setActiveView, activeView }) {
           </button>
         </div>
       )}
+
+      {/* CUSTOMER SERVICE */}
+      <button
+        onClick={() =>
+          setCustomerServiceOpen(!customerServiceOpen)
+        }
+        className="w-full px-4 py-2 flex justify-between hover:bg-gray-100 text-gray-600"
+      >
+        <span>
+          <HiOutlineWrench className="inline mr-2" />
+          Customer Service
+        </span>
+        <FiChevronDown
+          className={`transition-transform ${
+            customerServiceOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {customerServiceOpen && (
+        <div className="ml-6 mt-1 space-y-1">
+          <button
+            onClick={() =>
+              setActiveView("create-customer-service")
+            }
+            className={`block w-full text-left px-4 py-2 rounded ${
+              activeView === "create-customer-service"
+                ? "bg-blue-100 text-blue-700"
+                : "text-gray-600 hover:bg-gray-50"
+            }`}
+          >
+            • Create Customer Service
+          </button>
+        </div>
+      )}
+
+      {/* LOGOUT BUTTON */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 ml-2">
+  <button
+    onClick={() => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }}
+    className="w-12 h-12 rounded-full bg-red-600 text-white flex justify-center items-center shadow"
+  >
+    <BiPowerOff className="text-2xl" />
+  </button>
+
+      </div>
     </aside>
   );
 }

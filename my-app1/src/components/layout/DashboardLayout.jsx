@@ -5,6 +5,7 @@ import CreateStaff from "../admin/CreateStaff";
 import ManageStaff from "../admin/ManageStaff";
 import Amc from "../admin/Amc"; // ✅ IMPORT AMC
 import Service from "../services/Service"; // ✅ IMPORT SERVICE
+import Customer from "../customer/Customer";
 
 export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -19,6 +20,8 @@ export default function DashboardLayout() {
         return <Amc />; // ✅ AMC PAGE RENDERS HERE
       case "create-service":
         return <Service />; // ✅ SERVICE PAGE RENDERS HERE
+      case "create-customer-service":
+        return <Customer/>
 
       
       default:
