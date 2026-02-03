@@ -9,6 +9,7 @@ import DashboardLayout from "./components/layout/DashboardLayout";
 import ManageStaff from "./components/admin/ManageStaff";
 import Amc from "./components/admin/Amc";
 import Service from "./components/services/Service";
+import Invoice from "./components/admin/Invoice";
 // import AuthGuard from "./Auth/AuthGuard";
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/manage-staff" element={<ManageStaff />} />
         <Route path="/amc" element={<Amc />} />
         <Route path="/service" element={<Service />} />
+        <Route path="/invoice" element={<Invoice/>}/>
       </Routes>
     </BrowserRouter>
   );

@@ -6,6 +6,8 @@ import ManageStaff from "../admin/ManageStaff";
 import Amc from "../admin/Amc"; // ✅ IMPORT AMC
 import Service from "../services/Service"; // ✅ IMPORT SERVICE
 import Customer from "../customer/Customer";
+import AccountDetails from "../admin/AccountDetails";
+import DashboardBarChart from "../admin/DashboardBarChart";
 
 export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -22,15 +24,19 @@ export default function DashboardLayout() {
         return <Service />; // ✅ SERVICE PAGE RENDERS HERE
       case "create-customer-service":
         return <Customer/>
+      case "account-details":
+        return <AccountDetails/>
 
-      
       default:
-        return (
-          <div className="bg-white p-6 rounded shadow">
-            <h2 className="text-xl font-bold mb-4">Dashboard</h2>
-            <ManageStaff />
-          </div>
-        );
+        return (<DashboardBarChart />);
+    
+      // default:
+      //   return (
+      //     <div className="bg-white p-6 rounded shadow">
+      //       <h2 className="text-xl font-bold mb-4">Dashboard</h2>
+      //       <ManageStaff />
+      //     </div>
+      //   );
     }
   };
 

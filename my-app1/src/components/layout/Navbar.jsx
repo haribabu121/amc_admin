@@ -18,7 +18,8 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, onProfile }) {
   };
 
   return (
-    <header className="bg-white shadow px-4 py-3 flex items-center">
+    <header className="bg-[#0f1116] shadow px-4 py-3 flex items-center">
+    
       {/* Profile */}
       <div className="relative ml-auto">
         <button

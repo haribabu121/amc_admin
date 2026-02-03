@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+// import { FiEdit } from "react-icons/fi";
 export default function Customer() {
   const [showForm, setShowForm] = useState(false);
   const [services, setServices] = useState([]);
@@ -11,9 +11,25 @@ export default function Customer() {
     email: "",
     address: "",
     service_id: "",
+    gst_no:"",
     advance_payment: "",
     purchase_date: "",
   });
+
+
+/* ================= HELPERS ================= */
+
+  const generateInvoiceNumber = () => {
+    const d = new Date();
+    return `INV-${d.getFullYear()}${String(d.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}${String(d.getDate()).padStart(2, "0")}-${Math.floor(
+      100 + Math.random() * 900
+    )}`;
+  };
+
+
 
   /* ================= FETCH ================= */
   useEffect(() => {
@@ -74,6 +90,7 @@ export default function Customer() {
       email: "",
       address: "",
       service_id: "",
+      gst_no:"",
       advance_payment: "",
       purchase_date: "",
     });
@@ -151,7 +168,15 @@ export default function Customer() {
                 </option>
               ))}
             </select>
-
+<input
+  type="text"
+  placeholder="Enter GST Number"
+  value={formData.gst_no}
+  className="w-full border p-2"
+  onChange={(e) =>
+    setFormData({ ...formData, gst_no: e.target.value })
+  }
+/>
             <input
               type="number"
               name="advance_payment"
@@ -188,8 +213,10 @@ export default function Customer() {
                   <th className="border p-2">Phone</th>
                   <th className="border p-2">Email</th>
                   <th className="border p-2">Service</th>
-                  <th className="border p-2">Advance</th>
+                  <th className="border p-2">Gst No</th>
+                  <th className="border p-2">purchase_price</th>
                   <th className="border p-2">Date</th>
+                  <th className="border p-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -206,10 +233,19 @@ export default function Customer() {
                       <td className="border p-2">{c.phonenumber}</td>
                       <td className="border p-2">{c.email}</td>
                       <td className="border p-2">{c.service_name}</td>
+                      <td className="border p-2">{c.gst_no}</td>
                       <td className="border p-2">{c.advance_payment}</td>
                       <td className="border p-2">
   {new Date(c.purchase_date).toISOString().slice(0, 10)}
 </td>
+<td className="border p-2 justify-center gap-6">
+                <button
+                  onClick={() => setEdit({ ...s })}
+                  className="text-blue-600"
+                >
+                  invoice
+                </button>
+                </td>
                     </tr>
                   ))
                 )}

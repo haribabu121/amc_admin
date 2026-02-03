@@ -1,8 +1,11 @@
 import { FiHome, FiUsers, FiChevronDown } from "react-icons/fi";
 import { BiPowerOff } from "react-icons/bi";
-
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { HiOutlineWrench } from "react-icons/hi2";
+import { CiSettings } from "react-icons/ci";
+import { FiUserPlus } from "react-icons/fi";
+import { MdOutlineSettingsAccessibility } from "react-icons/md";
+import { MdDashboard } from "react-icons/md";
 import { useState } from "react";
 
 export default function Sidebar({ setActiveView, activeView }) {
@@ -10,11 +13,15 @@ export default function Sidebar({ setActiveView, activeView }) {
   const [amcOpen, setAmcOpen] = useState(false);
   const [serviceOpen, setServiceOpen] = useState(false);
   const [customerServiceOpen, setCustomerServiceOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+
 
   return (
     <aside className="w-64 bg-white shadow h-screen fixed">
+      <div className=" min-h-screen text-white">
+
       {/* Header */}
-      <div className="p-4 font-bold border-b">ADMIN PANEL</div>
+      <div className="text-black p-4 font-bold border-b">ADMIN PANEL</div>
 
       {/* Dashboard */}
       <button
@@ -25,7 +32,7 @@ export default function Sidebar({ setActiveView, activeView }) {
             : "text-gray-600"
         }`}
       >
-        <FiHome className="inline mr-2" />
+        <MdDashboard className="inline mr-2" />
         Dashboard
       </button>
 
@@ -97,7 +104,7 @@ export default function Sidebar({ setActiveView, activeView }) {
         className="w-full px-4 py-2 flex justify-between hover:bg-gray-100 text-gray-600"
       >
         <span>
-          <HiOutlineWrench className="inline mr-2" />
+          <MdOutlineSettingsAccessibility className="inline mr-2" />
           Service
         </span>
         <FiChevronDown
@@ -113,8 +120,8 @@ export default function Sidebar({ setActiveView, activeView }) {
             onClick={() => setActiveView("create-service")}
             className={`block w-full text-left px-4 py-2 rounded ${
               activeView === "create-service"
-                ? "bg-blue-100 text-blue-700"
-                : "text-gray-600 hover:bg-gray-50"
+                ? "hover text-red-700"
+                : "hover:text-red-600"
             }`}
           >
             • Create Service
@@ -130,7 +137,7 @@ export default function Sidebar({ setActiveView, activeView }) {
         className="w-full px-4 py-2 flex justify-between hover:bg-gray-100 text-gray-600"
       >
         <span>
-          <HiOutlineWrench className="inline mr-2" />
+          <FiUserPlus className="inline mr-2" />
           Customer Service
         </span>
         <FiChevronDown
@@ -156,6 +163,34 @@ export default function Sidebar({ setActiveView, activeView }) {
           </button>
         </div>
       )}
+      {/* ACCOUNT DETAILS */}
+<button
+  onClick={() => setAccountOpen(!accountOpen)}
+  className="w-full px-4 py-2 flex justify-between hover:bg-gray-100 text-gray-600"
+>
+  <span>
+    <CiSettings className="inline mr-2 h-9 w-5" />
+    Settings
+  </span>
+  <FiChevronDown
+    className={`transition-transform ${accountOpen ? "rotate-180" : ""}`}
+  />
+</button>
+
+{accountOpen && (
+  <div className="ml-6 mt-1 space-y-1">
+    <button
+      onClick={() => setActiveView("account-details")}
+      className={`block w-full text-left px-4 py-2 rounded ${
+        activeView === "account-details"
+          ? "bg-blue-100 text-blue-700"
+          : "text-gray-600 hover:bg-gray-50"
+      }`}
+    >
+      • Profile
+    </button>
+  </div>
+)}
 
       {/* LOGOUT BUTTON */}
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 ml-2">
@@ -170,6 +205,7 @@ export default function Sidebar({ setActiveView, activeView }) {
     <BiPowerOff className="text-2xl" />
   </button>
 
+      </div>
       </div>
     </aside>
   );

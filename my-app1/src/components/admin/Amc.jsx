@@ -1,11 +1,19 @@
 import axios from "axios";
+import { generateAmcPdf } from "./AmcPdf";
 import { useEffect, useState } from "react";
 
 export default function Amc() {
   const [amcList, setAmcList] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
-
+//  ACCOUNT DETAILS FOR PDF
+  const [account, setAccount] = useState({
+    company_name: "",
+    account_no: "",
+    ifsc: "",
+    bank: "",
+    branch: "",
+  });
   const [formData, setFormData] = useState({
     customer_id: "",
     name: "",
@@ -24,10 +32,76 @@ export default function Amc() {
     end_date: "",
   });
 
+
+const numberToWords = (num) => {
+  const ones = [
+    "", "One", "Two", "Three", "Four", "Five",
+    "Six", "Seven", "Eight", "Nine", "Ten",
+    "Eleven", "Twelve", "Thirteen", "Fourteen",
+    "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen",
+  ];
+
+  const tens = [
+    "", "", "Twenty", "Thirty", "Forty",
+    "Fifty", "Sixty", "Seventy", "Eighty", "Ninety",
+  ];
+
+  if (num === 0) return "Zero";
+
+  const convertBelowThousand = (n) => {
+    let str = "";
+
+    if (n >= 100) {
+      str += ones[Math.floor(n / 100)] + " Hundred ";
+      n %= 100;
+    }
+
+    if (n >= 20) {
+      str += tens[Math.floor(n / 10)] + " ";
+      n %= 10;
+    }
+
+    if (n > 0) {
+      str += ones[n] + " ";
+    }
+
+    return str.trim();
+  };
+
+  let result = "";
+
+  if (num >= 1000) {
+    result += convertBelowThousand(Math.floor(num / 1000)) + " Thousand ";
+    num %= 1000;
+  }
+
+  result += convertBelowThousand(num);
+
+  return result.trim();
+};
+
+
+
   /* ================= HELPERS ================= */
 
   const toDateInput = (d) =>
     d ? new Date(d).toISOString().split("T")[0] : "";
+
+
+  // ✅ FETCH ACCOUNT DETAILS (ENTERED VALUES)
+  const fetchAccountForPdf = async () => {
+    const res = await axios.get("http://localhost:5000/api/account");
+    if (res.data.length > 0) {
+      const a = res.data[0]; // latest
+      setAccount({
+        company_name: a.company_name,
+        account_no: a.account_no,
+        ifsc: a.ifsc,
+        bank: a.bank,
+        branch: a.branch,
+      });
+    }
+  };
 
   const autoStatus = (cost, adv) => {
     cost = Number(cost || 0);
@@ -62,32 +136,39 @@ export default function Amc() {
     setAmcList(sorted);
   };
 
+  const fetchLatestCustomer = async () => {
+    const res = await axios.get(
+      "http://localhost:5000/api/amc/latest-customer"
+    );
+    fillCustomer(res.data);
+  };
+
   const fetchCustomerById = async (id) => {
     if (!id) return;
-
     try {
       const res = await axios.get(
         `http://localhost:5000/api/amc/customer/${id}`
       );
-
-      const c = res.data;
-
-      setFormData((prev) => ({
-        ...prev,
-        customer_id: c.customer_id,
-        name: c.name,
-        service_name: c.service_name,
-        service_cost: c.service_cost,
-        advance_payment: c.advance_payment,
-        remaining_balance:
-          Number(c.service_cost) - Number(c.advance_payment),
-        status: autoStatus(c.service_cost, c.advance_payment),
-      }));
+      fillCustomer(res.data);
     } catch {
       alert("Customer not found");
     }
   };
 
+  const fillCustomer = (c) => {
+    if (!c) return;
+    setFormData((prev) => ({
+      ...prev,
+      customer_id: c.customer_id,
+      name: c.name,
+      service_name: c.service_name,
+      service_cost: c.service_cost,
+      advance_payment: c.advance_payment,
+      remaining_balance:
+        Number(c.service_cost) - Number(c.advance_payment),
+      status: autoStatus(c.service_cost, c.advance_payment),
+    }));
+  };
   const saveAmc = async () => {
     await axios.post("http://localhost:5000/api/amc", {
       ...formData,
@@ -139,6 +220,7 @@ export default function Amc() {
   };
   useEffect(() => {
     fetchAmc();
+     fetchAccountForPdf();
   }, []);
 
   // DELETE STAFF
@@ -156,7 +238,8 @@ export default function Amc() {
 
       {!showForm && (
         <button
-          onClick={() => setShowForm(true)}
+          onClick={() => {setShowForm(true);
+             fetchLatestCustomer();}}
           className="bg-blue-600 text-white px-4 py-2 rounded mb-4"
         >
           Add AMC
@@ -166,9 +249,9 @@ export default function Amc() {
       {showForm && (
         <div className="bg-white p-4 shadow rounded mb-6">
           <div className="grid grid-cols-2 gap-3">
-            <input
+             <input
               className="border p-2"
-              placeholder="Enter Customer ID (cs-1)"
+              placeholder="Customer ID"
               value={formData.customer_id}
               onChange={(e) =>
                 setFormData({ ...formData, customer_id: e.target.value })
@@ -261,13 +344,37 @@ export default function Amc() {
                     >
                     delete
                     </button>
-                  <button
+                  {/* <button
                     onClick={() => downloadPdf(a.amc_id)}
                     className="bg-blue-600 px-3 py-1 rounded text-white"
                   >
                     PDF
-                  </button>
+                  </button> */}
+                  <button
+  onClick={() =>
+    generateAmcPdf({
+      customer_id: a.customer_id,
+      customer_name: a.name,
+      customer_address: a.address || "Hyderabad, Telangana",
+      service_cost: a.service_cost,
+      amount_words: `${numberToWords(a.service_cost)} Indian Rupees Only`,
+      start_date: a.start_date,
+      end_date: a.end_date,
+      due_date: a.end_date,
+      company_name: account.company_name,
+                      account_no: account.account_no,
+                      ifsc: account.ifsc,
+                      bank: account.bank,
+                      branch: account.branch,
+                      profile: account.profile
+    })
+  }
+  className="bg-blue-600 text-white px-3 py-1 rounded"
+>
+  PDF
+</button>
                 </td>
+                
 
               </tr>
             ))}
