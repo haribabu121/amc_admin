@@ -6,6 +6,8 @@ export default function Amc() {
   const [amcList, setAmcList] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
+  const [dateError, setDateError] = useState("");
+
 //  ACCOUNT DETAILS FOR PDF
   const [account, setAccount] = useState({
     company_name: "",
@@ -31,6 +33,24 @@ export default function Amc() {
     start_date: "",
     end_date: "",
   });
+
+
+const validateDates = (start, end) => {
+  if (!start || !end) {
+    return "Start date and End date are required";
+  }
+
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  if (endDate <= startDate) {
+    return "End date must be greater than Start date";
+  }
+
+  return "";
+};
+
+
 
 
 const numberToWords = (num) => {
@@ -170,6 +190,14 @@ const numberToWords = (num) => {
     }));
   };
   const saveAmc = async () => {
+    const error = validateDates(formData.start_date, formData.end_date);
+
+  if (error) {
+    setDateError(error);
+    return;
+  }
+
+  setDateError("");
     await axios.post("http://localhost:5000/api/amc", {
       ...formData,
       service_cost: Number(formData.service_cost),
@@ -194,6 +222,17 @@ const numberToWords = (num) => {
   };
 
   const updateAmcDates = async () => {
+    const error = validateDates(
+    updateData.start_date,
+    updateData.end_date
+  );
+
+  if (error) {
+    setDateError(error);
+    return;
+  }
+
+  setDateError("");
     await axios.put(
       `http://localhost:5000/api/amc-actions/${updateData.amc_id}`,
       updateData
@@ -240,7 +279,7 @@ const numberToWords = (num) => {
         <button
           onClick={() => {setShowForm(true);
              fetchLatestCustomer();}}
-          className="bg-blue-600 text-white px-4 py-2 rounded mb-4"
+          className="bg-blue-600 text-white px-3 ml-270 py-2 rounded mb-4"
         >
           Add AMC
         </button>
@@ -278,6 +317,10 @@ const numberToWords = (num) => {
                 setFormData({ ...formData, start_date: e.target.value })
               }
             />
+            {dateError && (
+  <p className="text-red-600 text-sm mt-2">{dateError}</p>
+)}
+
 
             <input
               type="date"
@@ -287,6 +330,10 @@ const numberToWords = (num) => {
                 setFormData({ ...formData, end_date: e.target.value })
               }
             />
+            {dateError && (
+  <p className="text-red-600 text-sm mt-2">{dateError}</p>
+)}
+
 
             <input
               className="border p-2 bg-gray-100"
@@ -393,6 +440,10 @@ const numberToWords = (num) => {
                 setUpdateData({ ...updateData, start_date: e.target.value })
               }
             />
+            {dateError && (
+  <p className="text-red-600 text-sm mb-3">{dateError}</p>
+)}
+
             <input
               type="date"
               className="border p-2 w-full mb-3"
@@ -401,6 +452,10 @@ const numberToWords = (num) => {
                 setUpdateData({ ...updateData, end_date: e.target.value })
               }
             />
+            {dateError && (
+  <p className="text-red-600 text-sm mb-3">{dateError}</p>
+)}
+
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setUpdateModal(false)}

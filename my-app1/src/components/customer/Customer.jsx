@@ -106,7 +106,7 @@ export default function Customer() {
         {!showForm && (
           <button
             onClick={() => setShowForm(true)}
-            className="bg-indigo-600 text-white px-4 py-2 rounded"
+            className="bg-indigo-600 text-white px-4 py-2 ml-252 rounded"
           >
             Add Customer
           </button>

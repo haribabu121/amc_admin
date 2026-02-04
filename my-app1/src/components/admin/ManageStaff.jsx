@@ -35,7 +35,7 @@ export default function ManageStaff({ reload }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded shadow">
+    <div>
       <h2 className="text-lg font-semibold mb-4">Staff List</h2>
 
       <table className="w-full border">

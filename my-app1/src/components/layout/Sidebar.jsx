@@ -1,212 +1,187 @@
-import { FiHome, FiUsers, FiChevronDown } from "react-icons/fi";
-import { BiPowerOff } from "react-icons/bi";
+import { useState } from "react";
+import { FiUsers, FiChevronDown } from "react-icons/fi";
+import { MdDashboard } from "react-icons/md";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { HiOutlineWrench } from "react-icons/hi2";
-import { CiSettings } from "react-icons/ci";
 import { FiUserPlus } from "react-icons/fi";
 import { MdOutlineSettingsAccessibility } from "react-icons/md";
-import { MdDashboard } from "react-icons/md";
-import { useState } from "react";
+import { CiSettings } from "react-icons/ci";
+import { BiPowerOff } from "react-icons/bi";
 
-export default function Sidebar({ setActiveView, activeView }) {
+export default function Sidebar({
+  sidebarOpen,
+  setSidebarOpen,
+  activeView,
+  setActiveView,
+}) {
   const [staffOpen, setStaffOpen] = useState(false);
   const [amcOpen, setAmcOpen] = useState(false);
   const [serviceOpen, setServiceOpen] = useState(false);
   const [customerServiceOpen, setCustomerServiceOpen] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
-
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
-    <aside className="w-64 bg-white shadow h-screen fixed">
-      <div className=" min-h-screen text-white">
-
-      {/* Header */}
-      <div className="text-black p-4 font-bold border-b">ADMIN PANEL</div>
-
-      {/* Dashboard */}
-      <button
-        onClick={() => setActiveView("dashboard")}
-        className={`w-full px-4 py-2 text-left hover:bg-gray-100 ${
-          activeView === "dashboard"
-            ? "bg-blue-100 text-blue-700"
-            : "text-gray-600"
-        }`}
-      >
-        <MdDashboard className="inline mr-2" />
-        Dashboard
-      </button>
-
-      {/* STAFF DROPDOWN */}
-      <button
-        onClick={() => setStaffOpen(!staffOpen)}
-        className="w-full px-4 py-2 flex justify-between hover:bg-gray-100 text-gray-600"
-      >
-        <span>
-          <FiUsers className="inline mr-2" />
-          Staff / Users
-        </span>
-        <FiChevronDown
-          className={`transition-transform ${
-            staffOpen ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {staffOpen && (
-        <div className="ml-6 mt-1 space-y-1">
-          <button
-            onClick={() => setActiveView("create-staff")}
-            className={`block w-full text-left px-4 py-2 rounded ${
-              activeView === "create-staff"
-                ? "bg-blue-100 text-blue-700"
-                : "text-gray-600 hover:bg-gray-50"
-            }`}
-          >
-            • Create Staff
-          </button>
-        </div>
-      )}
-
-      {/* AMC DROPDOWN */}
-      <button
-        onClick={() => setAmcOpen(!amcOpen)}
-        className="w-full px-4 py-2 flex justify-between hover:bg-gray-100 text-gray-600"
-      >
-        <span>
-          <AiOutlinePlusCircle className="inline mr-2" />
-          AMC
-        </span>
-        <FiChevronDown
-          className={`transition-transform ${
-            amcOpen ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {amcOpen && (
-        <div className="ml-6 mt-1 space-y-1">
-          <button
-            onClick={() => setActiveView("create-amc")}
-            className={`block w-full text-left px-4 py-2 rounded ${
-              activeView === "create-amc"
-                ? "bg-blue-100 text-blue-700"
-                : "text-gray-600 hover:bg-gray-50"
-            }`}
-          >
-            • Create AMC
-          </button>
-        </div>
-      )}
-
-      {/* SERVICE (ADMIN) */}
-      <button
-        onClick={() => setServiceOpen(!serviceOpen)}
-        className="w-full px-4 py-2 flex justify-between hover:bg-gray-100 text-gray-600"
-      >
-        <span>
-          <MdOutlineSettingsAccessibility className="inline mr-2" />
-          Service
-        </span>
-        <FiChevronDown
-          className={`transition-transform ${
-            serviceOpen ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {serviceOpen && (
-        <div className="ml-6 mt-1 space-y-1">
-          <button
-            onClick={() => setActiveView("create-service")}
-            className={`block w-full text-left px-4 py-2 rounded ${
-              activeView === "create-service"
-                ? "hover text-red-700"
-                : "hover:text-red-600"
-            }`}
-          >
-            • Create Service
-          </button>
-        </div>
-      )}
-
-      {/* CUSTOMER SERVICE */}
-      <button
-        onClick={() =>
-          setCustomerServiceOpen(!customerServiceOpen)
-        }
-        className="w-full px-4 py-2 flex justify-between hover:bg-gray-100 text-gray-600"
-      >
-        <span>
-          <FiUserPlus className="inline mr-2" />
-          Customer Service
-        </span>
-        <FiChevronDown
-          className={`transition-transform ${
-            customerServiceOpen ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {customerServiceOpen && (
-        <div className="ml-6 mt-1 space-y-1">
-          <button
-            onClick={() =>
-              setActiveView("create-customer-service")
-            }
-            className={`block w-full text-left px-4 py-2 rounded ${
-              activeView === "create-customer-service"
-                ? "bg-blue-100 text-blue-700"
-                : "text-gray-600 hover:bg-gray-50"
-            }`}
-          >
-            • Create Customer Service
-          </button>
-        </div>
-      )}
-      {/* ACCOUNT DETAILS */}
-<button
-  onClick={() => setAccountOpen(!accountOpen)}
-  className="w-full px-4 py-2 flex justify-between hover:bg-gray-100 text-gray-600"
->
-  <span>
-    <CiSettings className="inline mr-2 h-9 w-5" />
-    Settings
-  </span>
-  <FiChevronDown
-    className={`transition-transform ${accountOpen ? "rotate-180" : ""}`}
-  />
-</button>
-
-{accountOpen && (
-  <div className="ml-6 mt-1 space-y-1">
-    <button
-      onClick={() => setActiveView("account-details")}
-      className={`block w-full text-left px-4 py-2 rounded ${
-        activeView === "account-details"
-          ? "bg-blue-100 text-blue-700"
-          : "text-gray-600 hover:bg-gray-50"
-      }`}
+    <aside
+      className={`fixed z-50 inset-y-0 left-0 w-64 bg-[#191C24] text-gray-300
+      transform transition-transform duration-300
+      ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+      lg:translate-x-0`}
     >
-      • Profile
-    </button>
-  </div>
-)}
-
-      {/* LOGOUT BUTTON */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 ml-2">
-  <button
-    onClick={() => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      window.location.href = "/login";
-    }}
-    className="w-12 h-12 rounded-full bg-red-600 text-white flex justify-center items-center shadow"
-  >
-    <BiPowerOff className="text-2xl" />
-  </button>
-
+      {/* BRAND */}
+      <div className="px-6 py-5 border-b border-gray-700 text-blue-500 text-xl font-bold">
+        Admin Panel
       </div>
+
+      {/* MENU */}
+      <nav className="px-3 space-y-1 mt-4">
+
+        <MenuButton
+          icon={<MdDashboard />}
+          label="Dashboard"
+          active={activeView === "dashboard"}
+          onClick={() => {
+            setActiveView("dashboard");
+            setSidebarOpen(false);
+          }}
+        />
+
+        <MenuDropdown
+          title="Staff / Users"
+          icon={<FiUsers />}
+          open={staffOpen}
+          toggle={() => setStaffOpen(!staffOpen)}
+        >
+          <MenuItem
+            label="Create Staff"
+            active={activeView === "create-staff"}
+            onClick={() => {
+              setActiveView("create-staff");
+              setSidebarOpen(false);
+            }}
+          />
+        </MenuDropdown>
+
+        <MenuDropdown
+          title="AMC"
+          icon={<AiOutlinePlusCircle />}
+          open={amcOpen}
+          toggle={() => setAmcOpen(!amcOpen)}
+        >
+          <MenuItem
+            label="Create AMC"
+            active={activeView === "create-amc"}
+            onClick={() => {
+              setActiveView("create-amc");
+              setSidebarOpen(false);
+            }}
+          />
+        </MenuDropdown>
+
+        <MenuDropdown
+          title="Service"
+          icon={<MdOutlineSettingsAccessibility />}
+          open={serviceOpen}
+          toggle={() => setServiceOpen(!serviceOpen)}
+        >
+          <MenuItem
+            label="Create Service"
+            active={activeView === "create-service"}
+            onClick={() => {
+              setActiveView("create-service");
+              setSidebarOpen(false);
+            }}
+          />
+        </MenuDropdown>
+
+        <MenuDropdown
+          title="Customer Service"
+          icon={<FiUserPlus />}
+          open={customerServiceOpen}
+          toggle={() => setCustomerServiceOpen(!customerServiceOpen)}
+        >
+          <MenuItem
+            label="Create Customer Service"
+            active={activeView === "create-customer-service"}
+            onClick={() => {
+              setActiveView("create-customer-service");
+              setSidebarOpen(false);
+            }}
+          />
+        </MenuDropdown>
+
+        <MenuDropdown
+          title="Settings"
+          icon={<CiSettings />}
+          open={settingsOpen}
+          toggle={() => setSettingsOpen(!settingsOpen)}
+        >
+          <MenuItem
+            label="Profile"
+            active={activeView === "account-details"}
+            onClick={() => {
+              setActiveView("account-details");
+              setSidebarOpen(false);
+            }}
+          />
+        </MenuDropdown>
+      </nav>
+
+      {/* LOGOUT */}
+      <div className="absolute bottom-6 w-full flex justify-center">
+        <button
+          onClick={() => {
+            localStorage.clear();
+            window.location.href = "/login";
+          }}
+          className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white"
+        >
+          <BiPowerOff size={22} />
+        </button>
       </div>
     </aside>
+  );
+}
+
+/* ===== REUSABLE ===== */
+
+function MenuButton({ icon, label, active, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full flex items-center gap-3 px-4 py-2 rounded
+      ${active ? "bg-blue-600 text-white" : "hover:bg-gray-700"}`}
+    >
+      {icon} {label}
+    </button>
+  );
+}
+
+function MenuDropdown({ title, icon, open, toggle, children }) {
+  return (
+    <>
+      <button
+        onClick={toggle}
+        className="w-full flex justify-between items-center px-4 py-2 hover:bg-gray-700 rounded"
+      >
+        <span className="flex items-center gap-3">
+          {icon} {title}
+        </span>
+        <FiChevronDown
+          className={`transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      {open && <div className="ml-6">{children}</div>}
+    </>
+  );
+}
+
+function MenuItem({ label, active, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full text-left px-4 py-2 rounded text-sm
+      ${active ? "bg-blue-600 text-white" : "hover:bg-gray-700"}`}
+    >
+      • {label}
+    </button>
   );
 }
