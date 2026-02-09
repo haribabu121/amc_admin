@@ -47,14 +47,22 @@ export default function ManageStaff({ reload }) {
 
       {/* ================= TABLE ================= */}
       <div className="overflow-x-auto">
-        <table className="w-full border rounded-lg overflow-hidden">
-          <thead className="bg-violet-500">
+        <table className="w-full rounded-lg overflow-hidden">
+          <thead>
             <tr>
-              <th className="border border-black p-2 font-normal text-white">ID</th>
-              <th className="border border-black p-2 font-normal text-white">Name</th>
-              <th className="border border-black p-2 font-normal text-white">Email</th>
-              <th className="border border-black p-2 font-normal text-white">Phone</th>
-              <th className="border border-black p-2 font-normal text-white">
+              <th className="p-3 font-normal bg-blue-500 text-white border-b border-black">
+                ID
+              </th>
+              <th className="p-3 font-normal bg-orange-400 text-white border-b border-black">
+                Name
+              </th>
+              <th className="p-3 font-normal bg-green-500 text-white border-b border-black">
+                Email
+              </th>
+              <th className="p-3 font-normal bg-purple-500 text-white border-b border-black">
+                Phone
+              </th>
+              <th className="p-3 font-normal bg-red-500 text-white border-b border-black">
                 Actions
               </th>
             </tr>
@@ -75,32 +83,40 @@ export default function ManageStaff({ reload }) {
                   }}
                   className="text-center"
                 >
-                  <td className="border p-2 bg-yellow-200">
+                  <td className="p-3 bg-yellow-200 border-b border-gray-300">
                     {index + 1}
                   </td>
-                  <td className="border p-2 bg-gray-100">{s.name}</td>
-                  <td className="border p-2 bg-gray-100">{s.email}</td>
-                  <td className="border p-2 bg-gray-100">{s.phone}</td>
-                  <td className="border p-2 flex justify-center gap-6 bg-gray-100 w-auto h-10">
-                    {/* EDIT */}
-                    <motion.button
-                      whileHover={{ scale: 1.2, rotate: 5 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => setEdit({ ...s })}
-                      className="text-blue-600"
-                    >
-                      <FiEdit size={18} />
-                    </motion.button>
+                  <td className="p-3 bg-gray-100 border-b border-gray-300">
+                    {s.name}
+                  </td>
+                  <td className="p-3 bg-gray-100 border-b border-gray-300">
+                    {s.email}
+                  </td>
+                  <td className="p-3 bg-gray-100 border-b border-gray-300">
+                    {s.phone}
+                  </td>
+                  <td className="p-3 bg-gray-100 border-b border-gray-300">
+                    <div className="flex justify-center gap-6">
+                      {/* EDIT */}
+                      <motion.button
+                        whileHover={{ scale: 1.2, rotate: 5 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setEdit({ ...s })}
+                        className="text-blue-600"
+                      >
+                        <FiEdit size={18} />
+                      </motion.button>
 
-                    {/* DELETE */}
-                    <motion.button
-                      whileHover={{ scale: 1.2, rotate: -5 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => deleteStaff(s.id)}
-                      className="text-red-600"
-                    >
-                      <FiTrash2 size={18} />
-                    </motion.button>
+                      {/* DELETE */}
+                      <motion.button
+                        whileHover={{ scale: 1.2, rotate: -5 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => deleteStaff(s.id)}
+                        className="text-red-600"
+                      >
+                        <FiTrash2 size={18} />
+                      </motion.button>
+                    </div>
                   </td>
                 </motion.tr>
               ))}

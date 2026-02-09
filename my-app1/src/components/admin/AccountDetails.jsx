@@ -221,13 +221,13 @@ export default function AccountDetails() {
       )}
 
       {!showForm && (
-        <table className="w-full mt-6 border border-collapse">
+        <table className="w-full rounded-lg overflow-hidden shadow-md mt-6">
           <thead>
             <tr>
               {tableHeaders.map((h) => (
                 <th
                   key={h.label}
-                  className={`${h.color} text-white border p-2 font-normal`}
+                  className={`${h.color} text-white  p-2 font-normal`}
                 >
                   {h.label}
                 </th>
@@ -237,8 +237,8 @@ export default function AccountDetails() {
           <tbody>
             {accounts.map((a) => (
               <tr key={a.id} className="text-center">
-                <td className="border p-2 bg-gray-100">{a.customer_no}</td>
-                <td className="border p-2 bg-gray-100">
+                <td className="p-3 bg-gray-100 border-b border-gray-300">{a.customer_no}</td>
+                <td className="p-3 bg-gray-100 border-b border-gray-300">
                   {a.profile && (
                     <img
                       src={`http://localhost:5000/uploads/${a.profile}`}
@@ -247,10 +247,10 @@ export default function AccountDetails() {
                     />
                   )}
                 </td>
-                <td className="border p-2 bg-gray-100">{a.company_name}</td>
-                <td className="border p-2 bg-gray-100">{a.account_no}</td>
-                <td className="border p-2 bg-gray-100">{a.bank}</td>
-                <td className="border p-2 bg-gray-100">{a.branch}</td>
+                <td className=" p-3 bg-gray-100 border-b border-gray-300">{a.company_name}</td>
+                <td className=" p-3 bg-gray-100 border-b border-gray-300">{a.account_no}</td>
+                <td className=" p-3 bg-gray-100 border-b border-gray-300">{a.bank}</td>
+                <td className=" p-3 bg-gray-100 border-b border-gray-300">{a.branch}</td>
               </tr>
             ))}
           </tbody>

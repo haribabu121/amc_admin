@@ -251,16 +251,16 @@ export default function Customer() {
       {!showForm && (
         <div>
           <h2 className="text-lg font-bold mb-3">Customers</h2>
-          <table className="w-full border">
+          <table className="w-full border rounded-lg overflow-hidden">
             <thead className="bg-gray-200">
               <tr>
-                <th className="border p-2 bg-red-300">Name</th>
-                <th className="border p-2 bg-orange-300">Phone</th>
-                <th className="border p-2 bg-yellow-300">Email</th>
-                <th className="border p-2 bg-green-300">Service</th>
-                <th className="border p-2 bg-blue-300">GST No</th>
-                <th className="border p-2 bg-purple-300">Advance</th>
-                <th className="border p-2 bg-indigo-300">Purchase Date</th>
+                <th className="p-3 bg-yellow-200 border-b border-gray-300 bg-red-300">Name</th>
+                <th className="p-3  border-b border-gray-300 bg-orange-400">Phone</th>
+                <th className="p-3  border-b border-gray-300 bg-yellow-300">Email</th>
+                <th className="p-3  border-b border-gray-300 bg-green-300">Service</th>
+                <th className="p-3 border-b border-gray-300 bg-blue-300">GST No</th>
+                <th className="p-3  border-b border-gray-300 bg-purple-300">Advance</th>
+                <th className="p-3  border-b border-gray-300 bg-indigo-300">Purchase Date</th>
               </tr>
             </thead>
             <tbody>
@@ -273,13 +273,13 @@ export default function Customer() {
               ) : (
                 customers.map((c) => (
                   <tr key={c.customer_id}>
-                    <td className="border p-2 bg-gray-200">{c.name}</td>
-                    <td className="border p-2 bg-gray-200">{c.phonenumber}</td>
-                    <td className="border p-2 bg-gray-200">{c.email}</td>
-                    <td className="border p-2 bg-gray-200">{c.service_name}</td>
-                    <td className="border p-2 bg-gray-200">{c.gst_no}</td>
-                    <td className="border p-2 bg-gray-200">{c.advance_payment}</td>
-                    <td className="border p-2 bg-gray-200">{formatDate(c.purchase_date)}</td>
+                    <td className=" p-3 bg-gray-100 border-b border-gray-300">{c.name}</td>
+                    <td className="p-3 bg-gray-100 border-b border-gray-300">{c.phonenumber}</td>
+                    <td className="p-3 bg-gray-100 border-b border-gray-300">{c.email}</td>
+                    <td className="p-3 bg-gray-100 border-b border-gray-300">{c.service_name}</td>
+                    <td className="p-3 bg-gray-100 border-b border-gray-300">{c.gst_no}</td>
+                    <td className="p-3 bg-gray-100 border-b border-gray-300">{c.advance_payment}</td>
+                    <td className="p-3 bg-gray-100 border-b border-gray-300">{formatDate(c.purchase_date)}</td>
                   </tr>
                 ))
               )}

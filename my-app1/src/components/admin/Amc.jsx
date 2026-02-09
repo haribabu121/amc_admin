@@ -297,32 +297,32 @@ export default function Amc() {
       )}
 
       {!showForm && (
-        <table className="w-full border">
+        <table className="w-full rounded-lg overflow-hidden shadow">
           <thead className="bg-gray-100">
             <tr>
-              <th className="border p-2">Name</th>
-              <th className="border p-2">Service</th>
-              <th className="border p-2">Cost</th>
-              <th className="border p-2">Advance</th>
-              <th className="border p-2">Balance</th>
-              <th className="border p-2">Status</th>
-              <th className="border p-2">Start</th>
-              <th className="border p-2">End</th>
-              <th className="border p-2">Action</th>
+              <th className="p-3 font-normal  text-white border-b  bg-red-400">Name</th>
+              <th className=" p-2 bg-yellow-400">Service</th>
+              <th className=" p-2 bg-violet-300">Cost</th>
+              <th className="p-2 bg-blue-300">Advance</th>
+              <th className=" p-2 bg-indigo-300">Balance</th>
+              <th className=" p-2 bg-green-300">Status</th>
+              <th className=" p-2 bg-pink-300">Start</th>
+              <th className=" p-2 bg-purple-300">End</th>
+              <th className=" p-2 bg-gray-400">Action</th>
             </tr>
           </thead>
           <tbody>
             {amcList.map((a) => (
               <tr key={a.amc_id} className={getRowColor(a.end_date)}>
-                <td className="border p-2">{a.name}</td>
-                <td className="border p-2">{a.service_name}</td>
-                <td className="border p-2">₹{a.service_cost}</td>
-                <td className="border p-2">₹{a.advance_payment}</td>
-                <td className="border p-2">₹{a.remaining_balance}</td>
-                <td className="border p-2">{a.status}</td>
-                <td className="border p-2">{toDateInput(a.start_date)}</td>
-                <td className="border p-2">{toDateInput(a.end_date)}</td>
-                <td className="border p-2 flex gap-2 justify-center">
+                <td className="p-3 bg-yellow-200 border-b border-gray-300">{a.name}</td>
+                <td className="p-3 bg-yellow-200 border-b border-gray-300">{a.service_name}</td>
+                <td className="p-3 bg-yellow-200 border-b border-gray-300">₹{a.service_cost}</td>
+                <td className="p-3 bg-yellow-200 border-b border-gray-300">₹{a.advance_payment}</td>
+                <td className="p-3 bg-yellow-200 border-b border-gray-300">₹{a.remaining_balance}</td>
+                <td className="p-3 bg-yellow-200 border-b border-gray-300">{a.status}</td>
+                <td className="p-3 bg-yellow-200 border-b border-gray-300">{toDateInput(a.start_date)}</td>
+                <td className="p-3 bg-yellow-200 border-b border-gray-300">{toDateInput(a.end_date)}</td>
+                <td className="p-3 bg-yellow-200 border-b border-gray-300 flex gap-2 justify-center">
                   <button
                     onClick={() => openUpdate(a)}
                     className="bg-yellow-500 px-3 py-1 rounded"

@@ -159,26 +159,26 @@ export default function Service() {
       )}
 
       {!showForm && (
-        <table className="w-full border mt-6">
+        <table className="w-full  rounded-lg overflow-hidden mt-6">
           <thead className="bg-gray-100">
             <tr>
-              <th className="border p-2 bg-blue-300">ID</th>
-              <th className="border p-2 bg-green-300">Service Name</th>
-              <th className="border p-2 bg-yellow-300">Cost</th>
-              <th className="border p-2 bg-red-300">Date</th>
-              <th className="border p-2 bg-pink-300">Type</th>
+              <th className=" p-2 bg-blue-300">ID</th>
+              <th className=" p-2 bg-green-300">Service Name</th>
+              <th className=" p-2 bg-yellow-300">Cost</th>
+              <th className=" p-2 bg-red-300">Date</th>
+              <th className=" p-2 bg-pink-300">Type</th>
             </tr>
           </thead>
           <tbody>
           {serviceList.map((s, i) => (
   <tr key={s.id}>
-    <td className="border p-2 bg-indigo-300">{i + 1}</td>
-    <td className="border p-2 bg-gray-100">{s.service_name}</td>
-    <td className="border p-2 bg-gray-100">₹{s.service_cost}</td>
-    <td className="border p-2 bg-gray-100">
+    <td className=" p-3  border-b border-gray-400 bg-indigo-300">{i + 1}</td>
+    <td className=" p-3 bg-yellow-200 border-b border-gray-300">{s.service_name}</td>
+    <td className=" p-3 bg-yellow-200 border-b border-gray-300">₹{s.service_cost}</td>
+    <td className=" p-3 bg-yellow-200 border-b border-gray-300">
       {s.service_date?.substring(0, 10)}
     </td>
-    <td className="border p-2 bg-gray-100">{s.service_type}</td>
+    <td className=" p-3 bg-gray-100 border-b border-gray-300">{s.service_type}</td>
   </tr>
     ))}
     </tbody>
