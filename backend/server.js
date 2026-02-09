@@ -9,7 +9,10 @@ import amcRoutes from "./routes/amc.routes.js";
 import serviceRoutes from "./routes/service.route.js";
 import customerRoutes from "./routes/customer.routes.js"
 import updateamc2 from "./routes/updateamc.routes.js";
+import accountRoutes from "./routes/accountRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
+import path from "path";
 dotenv.config();
 
 const app = express();
@@ -46,6 +49,11 @@ app.use("/api/amc", amcRoutes); // AMC routes
 app.use("/api/service", serviceRoutes); // Service routes
 app.use("/api/customer",customerRoutes);
 app.use("/api/amc-actions",updateamc2);
+app.use("/api/account", accountRoutes);
+app.use("/api/counts",dashboardRoutes);
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+
 
 // Debug endpoint
 app.get("/api/debug/pdf-path", (req, res) => {

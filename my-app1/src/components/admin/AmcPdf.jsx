@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 /* ===== Convert image URL to Base64 ===== */
 const getBase64FromUrl = async (url) => {
-  const response = await fetch(url);
+   const response = await fetch(url, { mode: "cors" });
   const blob = await response.blob();
 
   return new Promise((resolve) => {
@@ -45,7 +45,7 @@ export const generateAmcPdf = async(data) => {
       `http://localhost:5000/uploads/${data.profile}`
     );
 
-    doc.addImage(imgBase64, "JPEG", 160, 10, 30, 30);
+    doc.addImage(imgBase64, "PNG", 160, 10, 30, 30);
   }
   console.log(data.profile);
   y += 20;

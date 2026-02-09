@@ -30,11 +30,24 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="relative flex h-screen overflow-hidden bg-gray-100">
+    <div className="relative flex h-screen overflow-hidden">
 
-      {/* ========== BUBBLE BACKGROUND ========== */}
-      <div className="absolute inset-0 pointer-events-none z-0">
+      {/* ================= VIDEO BACKGROUND ================= */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="/videos/dashboard-bg.mp4" type="video/mp4" />
+      </video>
 
+      {/* Glass overlay for readability */}
+      <div className="absolute inset-0 bg-gray-30/20  z-10" />
+
+      {/* ================= BUBBLE BACKGROUND ================= */}
+      <div className="absolute inset-0 pointer-events-none z-20">
         {/* Bottom bubbles */}
         <span className="bubble bubble-bottom left-[10%] w-10 h-10 animate-[bubble-up_14s_linear_infinite]" />
         <span className="bubble bubble-bottom left-[30%] w-16 h-16 animate-[bubble-up_20s_linear_infinite]" />
@@ -51,7 +64,8 @@ export default function DashboardLayout() {
         <span className="bubble bubble-right top-[40%] w-16 h-16 animate-[bubble-left_24s_linear_infinite]" />
         <span className="bubble bubble-right top-[70%] w-8 h-8 animate-[bubble-left_18s_linear_infinite]" />
       </div>
-      {/* MOBILE OVERLAY */}
+
+      {/* ================= MOBILE OVERLAY ================= */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
@@ -59,16 +73,18 @@ export default function DashboardLayout() {
         />
       )}
 
-      {/* SIDEBAR */}
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-        activeView={activeView}
-        setActiveView={setActiveView}
-      />
+      {/* ================= SIDEBAR ================= */}
+      <div className="relative z-30">
+        <Sidebar
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+          activeView={activeView}
+          setActiveView={setActiveView}
+        />
+      </div>
 
-      {/* CONTENT */}
-      <div className="flex-1 flex flex-col lg:ml-64">
+      {/* ================= CONTENT ================= */}
+      <div className="relative z-30 flex-1 flex flex-col lg:ml-64">
         <Navbar
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}

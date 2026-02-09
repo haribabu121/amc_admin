@@ -9,7 +9,13 @@ body {
 .bubble {
   position: absolute;
   border-radius: 9999px;
-  background: rgba(5, 65, 247, 0.685); /* blue-500 */
+  /*background: rgba(16, 16, 16, 0.715); /* blue-500 */
+background: linear-gradient(
+    120deg,
+    #2f06e5,  /* gray-50 */
+    #062e7e,  /* gray-200 */
+    #da09d3   /* blue-100 */
+  );
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
@@ -93,3 +99,13 @@ body {
     opacity: 0;
   }
 }
+/* @keyframes gradient-x {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient-x {
+  background-size: 400% 400%;
+  animation: gradient-x 15s ease infinite;
+} */

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { FiEdit, FiTrash2, FiDownload } from "react-icons/fi";
 import { generateAmcPdf } from "./AmcPdf";
 import { useEffect, useState } from "react";
 
@@ -8,7 +9,7 @@ export default function Amc() {
   const [updateModal, setUpdateModal] = useState(false);
   const [dateError, setDateError] = useState("");
 
-//  ACCOUNT DETAILS FOR PDF
+  // ACCOUNT DETAILS FOR PDF
   const [account, setAccount] = useState({
     company_name: "",
     account_no: "",
@@ -16,6 +17,7 @@ export default function Amc() {
     bank: "",
     branch: "",
   });
+
   const [formData, setFormData] = useState({
     customer_id: "",
     name: "",
@@ -34,93 +36,68 @@ export default function Amc() {
     end_date: "",
   });
 
+  /* ==================== DATE VALIDATION ==================== */
+  const validateDates = (start, end) => {
+    if (!start || !end) return "Start date and End date are required";
 
-const validateDates = (start, end) => {
-  if (!start || !end) {
-    return "Start date and End date are required";
-  }
+    const startDate = new Date(start);
+    const endDate = new Date(end);
 
-  const startDate = new Date(start);
-  const endDate = new Date(end);
+    if (endDate <= startDate) return "End date must be greater than Start date";
 
-  if (endDate <= startDate) {
-    return "End date must be greater than Start date";
-  }
-
-  return "";
-};
-
-
-
-
-const numberToWords = (num) => {
-  const ones = [
-    "", "One", "Two", "Three", "Four", "Five",
-    "Six", "Seven", "Eight", "Nine", "Ten",
-    "Eleven", "Twelve", "Thirteen", "Fourteen",
-    "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen",
-  ];
-
-  const tens = [
-    "", "", "Twenty", "Thirty", "Forty",
-    "Fifty", "Sixty", "Seventy", "Eighty", "Ninety",
-  ];
-
-  if (num === 0) return "Zero";
-
-  const convertBelowThousand = (n) => {
-    let str = "";
-
-    if (n >= 100) {
-      str += ones[Math.floor(n / 100)] + " Hundred ";
-      n %= 100;
-    }
-
-    if (n >= 20) {
-      str += tens[Math.floor(n / 10)] + " ";
-      n %= 10;
-    }
-
-    if (n > 0) {
-      str += ones[n] + " ";
-    }
-
-    return str.trim();
+    return "";
   };
 
-  let result = "";
+  // HANDLE DATE CHANGE (CREATE & UPDATE) - error disappears automatically
+  const handleDateChange = (field, value, source = "create") => {
+    if (source === "create") {
+      const updated = { ...formData, [field]: value };
+      setFormData(updated);
 
-  if (num >= 1000) {
-    result += convertBelowThousand(Math.floor(num / 1000)) + " Thousand ";
-    num %= 1000;
-  }
+      const error = validateDates(updated.start_date, updated.end_date);
+      setDateError(error);
+    } else {
+      const updated = { ...updateData, [field]: value };
+      setUpdateData(updated);
 
-  result += convertBelowThousand(num);
-
-  return result.trim();
-};
-
-
-
-  /* ================= HELPERS ================= */
-
-  const toDateInput = (d) =>
-    d ? new Date(d).toISOString().split("T")[0] : "";
-
-
-  // ✅ FETCH ACCOUNT DETAILS (ENTERED VALUES)
-  const fetchAccountForPdf = async () => {
-    const res = await axios.get("http://localhost:5000/api/account");
-    if (res.data.length > 0) {
-      const a = res.data[0]; // latest
-      setAccount({
-        company_name: a.company_name,
-        account_no: a.account_no,
-        ifsc: a.ifsc,
-        bank: a.bank,
-        branch: a.branch,
-      });
+      const error = validateDates(updated.start_date, updated.end_date);
+      setDateError(error);
     }
+  };
+
+  /* ==================== HELPERS ==================== */
+  const toDateInput = (d) => (d ? new Date(d).toISOString().split("T")[0] : "");
+
+  const numberToWords = (num) => {
+    const ones = [
+      "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+      "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen",
+    ];
+    const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+    if (num === 0) return "Zero";
+
+    const convertBelowThousand = (n) => {
+      let str = "";
+      if (n >= 100) {
+        str += ones[Math.floor(n / 100)] + " Hundred ";
+        n %= 100;
+      }
+      if (n >= 20) {
+        str += tens[Math.floor(n / 10)] + " ";
+        n %= 10;
+      }
+      if (n > 0) str += ones[n] + " ";
+      return str.trim();
+    };
+
+    let result = "";
+    if (num >= 1000) {
+      result += convertBelowThousand(Math.floor(num / 1000)) + " Thousand ";
+      num %= 1000;
+    }
+    result += convertBelowThousand(num);
+    return result.trim();
   };
 
   const autoStatus = (cost, adv) => {
@@ -146,8 +123,7 @@ const numberToWords = (num) => {
     return "bg-green-100";
   };
 
-  /* ================= API ================= */
-
+  /* ==================== API ==================== */
   const fetchAmc = async () => {
     const res = await axios.get("http://localhost:5000/api/amc");
     const sorted = res.data.sort(
@@ -156,19 +132,29 @@ const numberToWords = (num) => {
     setAmcList(sorted);
   };
 
+  const fetchAccountForPdf = async () => {
+    const res = await axios.get("http://localhost:5000/api/account");
+    if (res.data.length > 0) {
+      const a = res.data[0];
+      setAccount({
+        company_name: a.company_name,
+        account_no: a.account_no,
+        ifsc: a.ifsc,
+        bank: a.bank,
+        branch: a.branch,
+      });
+    }
+  };
+
   const fetchLatestCustomer = async () => {
-    const res = await axios.get(
-      "http://localhost:5000/api/amc/latest-customer"
-    );
+    const res = await axios.get("http://localhost:5000/api/amc/latest-customer");
     fillCustomer(res.data);
   };
 
   const fetchCustomerById = async (id) => {
     if (!id) return;
     try {
-      const res = await axios.get(
-        `http://localhost:5000/api/amc/customer/${id}`
-      );
+      const res = await axios.get(`http://localhost:5000/api/amc/customer/${id}`);
       fillCustomer(res.data);
     } catch {
       alert("Customer not found");
@@ -184,20 +170,19 @@ const numberToWords = (num) => {
       service_name: c.service_name,
       service_cost: c.service_cost,
       advance_payment: c.advance_payment,
-      remaining_balance:
-        Number(c.service_cost) - Number(c.advance_payment),
+      remaining_balance: Number(c.service_cost) - Number(c.advance_payment),
       status: autoStatus(c.service_cost, c.advance_payment),
     }));
   };
+
   const saveAmc = async () => {
     const error = validateDates(formData.start_date, formData.end_date);
+    if (error) {
+      setDateError(error);
+      return;
+    }
+    setDateError("");
 
-  if (error) {
-    setDateError(error);
-    return;
-  }
-
-  setDateError("");
     await axios.post("http://localhost:5000/api/amc", {
       ...formData,
       service_cost: Number(formData.service_cost),
@@ -210,8 +195,6 @@ const numberToWords = (num) => {
     alert("AMC saved successfully");
   };
 
-  /* ================= UPDATE ================= */
-
   const openUpdate = (row) => {
     setUpdateData({
       amc_id: row.amc_id,
@@ -222,63 +205,40 @@ const numberToWords = (num) => {
   };
 
   const updateAmcDates = async () => {
-    const error = validateDates(
-    updateData.start_date,
-    updateData.end_date
-  );
-
-  if (error) {
-    setDateError(error);
-    return;
-  }
-
-  setDateError("");
-    await axios.put(
-      `http://localhost:5000/api/amc-actions/${updateData.amc_id}`,
-      updateData
-    );
+    const error = validateDates(updateData.start_date, updateData.end_date);
+    if (error) {
+      setDateError(error);
+      return;
+    }
+    setDateError("");
+    await axios.put(`http://localhost:5000/api/amc-actions/${updateData.amc_id}`, updateData);
     fetchAmc();
     setUpdateModal(false);
-    alert("dates updated")
+    alert("Dates updated");
   };
 
- /* ================= PDF ================= */
-
-  const downloadPdf = async (amc_id) => {
-    const res = await axios.get(
-      `http://localhost:5000/api/amc-actions/pdf/${amc_id}`,
-      { responseType: "blob" }
-    );
-
-    const url = window.URL.createObjectURL(new Blob([res.data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `amc_${amc_id}.pdf`;
-    link.click();
-    window.URL.revokeObjectURL(url);
-  };
-  useEffect(() => {
-    fetchAmc();
-     fetchAccountForPdf();
-  }, []);
-
-  // DELETE STAFF
   const deleteAmc = async (amc_id) => {
-    if (!window.confirm("Delete staff?")) return;
+    if (!window.confirm("Delete AMC?")) return;
     await axios.delete(`http://localhost:5000/api/amc-actions/${amc_id}`);
     fetchAmc();
   };
 
-  /* ================= UI ================= */
+  useEffect(() => {
+    fetchAmc();
+    fetchAccountForPdf();
+  }, []);
 
+  /* ==================== UI ==================== */
   return (
     <div className="p-6">
       <h2 className="text-xl font-bold mb-4">AMC Management</h2>
 
       {!showForm && (
         <button
-          onClick={() => {setShowForm(true);
-             fetchLatestCustomer();}}
+          onClick={() => {
+            setShowForm(true);
+            fetchLatestCustomer();
+          }}
           className="bg-blue-600 text-white px-3 ml-270 py-2 rounded mb-4"
         >
           Add AMC
@@ -288,7 +248,7 @@ const numberToWords = (num) => {
       {showForm && (
         <div className="bg-white p-4 shadow rounded mb-6">
           <div className="grid grid-cols-2 gap-3">
-             <input
+            <input
               className="border p-2"
               placeholder="Customer ID"
               value={formData.customer_id}
@@ -297,51 +257,36 @@ const numberToWords = (num) => {
               }
               onBlur={(e) => fetchCustomerById(e.target.value)}
             />
-
             <input className="border p-2" value={formData.name} disabled />
             <input className="border p-2" value={formData.service_name} disabled />
             <input className="border p-2" value={formData.service_cost} disabled />
             <input className="border p-2" value={formData.advance_payment} disabled />
-
             <input
               className="border p-2 bg-gray-100"
               value={formData.remaining_balance}
               disabled
             />
-
             <input
               type="date"
               className="border p-2"
               value={formData.start_date}
-              onChange={(e) =>
-                setFormData({ ...formData, start_date: e.target.value })
-              }
+              onChange={(e) => handleDateChange("start_date", e.target.value, "create")}
             />
-            {dateError && (
-  <p className="text-red-600 text-sm mt-2">{dateError}</p>
-)}
-
-
             <input
               type="date"
               className="border p-2"
               value={formData.end_date}
-              onChange={(e) =>
-                setFormData({ ...formData, end_date: e.target.value })
-              }
+              onChange={(e) => handleDateChange("end_date", e.target.value, "create")}
             />
             {dateError && (
-  <p className="text-red-600 text-sm mt-2">{dateError}</p>
-)}
-
-
+              <p className="text-red-600 text-sm col-span-2">{dateError}</p>
+            )}
             <input
               className="border p-2 bg-gray-100"
               value={formData.status}
               disabled
             />
           </div>
-
           <button
             onClick={saveAmc}
             className="bg-green-600 text-white px-6 py-2 rounded mt-4"
@@ -355,7 +300,7 @@ const numberToWords = (num) => {
         <table className="w-full border">
           <thead className="bg-gray-100">
             <tr>
-               <th className="border p-2">Name</th>
+              <th className="border p-2">Name</th>
               <th className="border p-2">Service</th>
               <th className="border p-2">Cost</th>
               <th className="border p-2">Advance</th>
@@ -364,7 +309,6 @@ const numberToWords = (num) => {
               <th className="border p-2">Start</th>
               <th className="border p-2">End</th>
               <th className="border p-2">Action</th>
-
             </tr>
           </thead>
           <tbody>
@@ -377,57 +321,50 @@ const numberToWords = (num) => {
                 <td className="border p-2">₹{a.remaining_balance}</td>
                 <td className="border p-2">{a.status}</td>
                 <td className="border p-2">{toDateInput(a.start_date)}</td>
-
-                 <td className="border p-2">{toDateInput(a.end_date)}</td>
+                <td className="border p-2">{toDateInput(a.end_date)}</td>
                 <td className="border p-2 flex gap-2 justify-center">
                   <button
                     onClick={() => openUpdate(a)}
                     className="bg-yellow-500 px-3 py-1 rounded"
                   >
-                    Update
+                    <FiEdit size={18} />
                   </button>
-                   <button onClick={() => deleteAmc(a.amc_id)}
-                    className="bg-red-600 px-3 py-1 rounded"
-                    >
-                    delete
-                    </button>
-                  {/* <button
-                    onClick={() => downloadPdf(a.amc_id)}
-                    className="bg-blue-600 px-3 py-1 rounded text-white"
-                  >
-                    PDF
-                  </button> */}
                   <button
-  onClick={() =>
-    generateAmcPdf({
-      customer_id: a.customer_id,
-      customer_name: a.name,
-      customer_address: a.address || "Hyderabad, Telangana",
-      service_cost: a.service_cost,
-      amount_words: `${numberToWords(a.service_cost)} Indian Rupees Only`,
-      start_date: a.start_date,
-      end_date: a.end_date,
-      due_date: a.end_date,
-      company_name: account.company_name,
-                      account_no: account.account_no,
-                      ifsc: account.ifsc,
-                      bank: account.bank,
-                      branch: account.branch,
-                      profile: account.profile
-    })
-  }
-  className="bg-blue-600 text-white px-3 py-1 rounded"
->
-  PDF
-</button>
+                    onClick={() => deleteAmc(a.amc_id)}
+                    className="bg-red-600 px-3 py-1 rounded"
+                  >
+                    <FiTrash2 size={18} />
+                  </button>
+                  <button
+                    onClick={() =>
+                      generateAmcPdf({
+                        customer_id: a.customer_id,
+                        customer_name: a.name,
+                        customer_address: a.address || "Hyderabad, Telangana",
+                        service_cost: a.service_cost,
+                        amount_words: `${numberToWords(a.service_cost)} Indian Rupees Only`,
+                        start_date: a.start_date,
+                        end_date: a.end_date,
+                        due_date: a.end_date,
+                        company_name: account.company_name,
+                        account_no: account.account_no,
+                        ifsc: account.ifsc,
+                        bank: account.bank,
+                        branch: account.branch,
+                        profile: account.profile,
+                      })
+                    }
+                    className="bg-blue-600 text-white px-3 py-1 rounded"
+                  >
+                    <FiDownload size={18} />
+                  </button>
                 </td>
-                
-
               </tr>
             ))}
           </tbody>
         </table>
       )}
+
       {updateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded w-96">
@@ -436,26 +373,17 @@ const numberToWords = (num) => {
               type="date"
               className="border p-2 w-full mb-3"
               value={updateData.start_date}
-              onChange={(e) =>
-                setUpdateData({ ...updateData, start_date: e.target.value })
-              }
+              onChange={(e) => handleDateChange("start_date", e.target.value, "update")}
             />
-            {dateError && (
-  <p className="text-red-600 text-sm mb-3">{dateError}</p>
-)}
-
             <input
               type="date"
               className="border p-2 w-full mb-3"
               value={updateData.end_date}
-              onChange={(e) =>
-                setUpdateData({ ...updateData, end_date: e.target.value })
-              }
+              onChange={(e) => handleDateChange("end_date", e.target.value, "update")}
             />
             {dateError && (
-  <p className="text-red-600 text-sm mb-3">{dateError}</p>
-)}
-
+              <p className="text-red-600 text-sm mb-3">{dateError}</p>
+            )}
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setUpdateModal(false)}
@@ -473,7 +401,6 @@ const numberToWords = (num) => {
           </div>
         </div>
       )}
-
     </div>
   );
 }

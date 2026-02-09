@@ -8,13 +8,14 @@ export const createCustomer = (req, res) => {
     address,
     email,
     service_id,
+    gst_no,
     advance_payment,
     purchase_date,
   } = req.body;
-
-  if (!name || !phonenumber || !service_id || !purchase_date) {
+console.log(req.body);
+  if (!name || !phonenumber || !service_id || !purchase_date || !gst_no) {
     return res.status(400).json({
-      message: "Name, phone, service, and purchase date are required",
+      message: "Name, phone, service, and purchase date,gst_no are required",
     });
   }
 
@@ -39,8 +40,8 @@ export const createCustomer = (req, res) => {
     // 🔹 STEP 3: insert customer
     const insertSql = `
       INSERT INTO customer
-      (customer_id, name, phonenumber, address, email, service_id, advance_payment, purchase_date)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      (customer_id, name, phonenumber, address, email, service_id, gst_no, advance_payment, purchase_date)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)
     `;
 
     db.query(
@@ -52,6 +53,7 @@ export const createCustomer = (req, res) => {
         address || null,
         email || null,
         Number(service_id),
+        gst_no || null,
         Number(advance_payment || 0),
         purchase_date,
       ],
@@ -81,6 +83,7 @@ export const getCustomers = (req, res) => {
       c.address,
       c.advance_payment,
       c.purchase_date,
+      c.gst_no,
       s.service_name
     FROM customer c
     LEFT JOIN services s ON c.service_id = s.id

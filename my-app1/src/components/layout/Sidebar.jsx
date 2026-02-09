@@ -21,13 +21,13 @@ export default function Sidebar({
 
   return (
     <aside
-      className={`fixed z-50 inset-y-0 left-0 w-64 bg-[#191C24] text-gray-300
+      className={`fixed z-50 inset-y-0 left-0 w-64 bg-[#191C24] text-gray-200
       transform transition-transform duration-300
       ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
       lg:translate-x-0`}
     >
       {/* BRAND */}
-      <div className="px-6 py-5 border-b border-gray-700 text-blue-500 text-xl font-bold">
+      <div className="px-6 py-5 border-b border-gray-100 text-blue-500 text-xl font-bold">
         Admin Panel
       </div>
 
