@@ -21,137 +21,121 @@ export default function Sidebar({
 
   return (
     <aside
-      className={`relative fixed z-50 inset-y-0 left-0 w-70 h-full bg-[#191C24] text-gray-200
+      className={`fixed z-50 inset-y-0 left-0 w-64 bg-[#191C24] text-gray-200
       transform transition-transform duration-300
       ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-      lg:translate-x-0 overflow-hidden`}
+      lg:translate-x-0`}
     >
-      {/* ================= VIDEO BACKGROUND ================= */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      >
-        <source src="/videos/dashboard-bg.mp4" type="video/mp4" />
-      </video>
+      {/* BRAND */}
+      <div className="px-6 py-5 border-b border-gray-100 text-blue-500 text-xl font-bold">
+        Admin Panel
+      </div>
 
-      {/* ================= DARK OVERLAY (NO LAYOUT IMPACT) ================= */}
-      <div className="absolute inset-0 bg-black/60 z-0"></div>
+      {/* MENU */}
+      <nav className="px-3 space-y-1 mt-4">
 
-      {/* ================= CONTENT ================= */}
-      <div className="relative z-10 h-full">
-        {/* BRAND */}
-        <div className="px-6 py-5 border-b border-gray-100 text-blue-500 text-xl font-bold">
-          Admin Panel
-        </div>
+        <MenuButton
+          icon={<MdDashboard />}
+          label="Dashboard"
+          active={activeView === "dashboard"}
+          onClick={() => {
+            setActiveView("dashboard");
+            setSidebarOpen(false);
+          }}
+        />
 
-        {/* MENU */}
-        <nav className="px-2 space-y-1 mt-4">
-          <MenuButton
-            icon={<MdDashboard />}
-            label="Dashboard"
-            active={activeView === "dashboard"}
+        <MenuDropdown
+          title="Staff / Users"
+          icon={<FiUsers />}
+          open={staffOpen}
+          toggle={() => setStaffOpen(!staffOpen)}
+        >
+          <MenuItem
+            label="Create Staff"
+            active={activeView === "create-staff"}
             onClick={() => {
-              setActiveView("dashboard");
+              setActiveView("create-staff");
               setSidebarOpen(false);
             }}
           />
+        </MenuDropdown>
 
-          <MenuDropdown
-            title="Staff / Users"
-            icon={<FiUsers />}
-            open={staffOpen}
-            toggle={() => setStaffOpen(!staffOpen)}
-          >
-            <MenuItem
-              label="Create Staff"
-              active={activeView === "create-staff"}
-              onClick={() => {
-                setActiveView("create-staff");
-                setSidebarOpen(false);
-              }}
-            />
-          </MenuDropdown>
-
-          <MenuDropdown
-            title="AMC"
-            icon={<AiOutlinePlusCircle />}
-            open={amcOpen}
-            toggle={() => setAmcOpen(!amcOpen)}
-          >
-            <MenuItem
-              label="Create AMC"
-              active={activeView === "create-amc"}
-              onClick={() => {
-                setActiveView("create-amc");
-                setSidebarOpen(false);
-              }}
-            />
-          </MenuDropdown>
-
-          <MenuDropdown
-            title="Service"
-            icon={<MdOutlineSettingsAccessibility />}
-            open={serviceOpen}
-            toggle={() => setServiceOpen(!serviceOpen)}
-          >
-            <MenuItem
-              label="Create Service"
-              active={activeView === "create-service"}
-              onClick={() => {
-                setActiveView("create-service");
-                setSidebarOpen(false);
-              }}
-            />
-          </MenuDropdown>
-
-          <MenuDropdown
-            title="Customer Service"
-            icon={<FiUserPlus />}
-            open={customerServiceOpen}
-            toggle={() => setCustomerServiceOpen(!customerServiceOpen)}
-          >
-            <MenuItem
-              label="Create Customer Service"
-              active={activeView === "create-customer-service"}
-              onClick={() => {
-                setActiveView("create-customer-service");
-                setSidebarOpen(false);
-              }}
-            />
-          </MenuDropdown>
-
-          <MenuDropdown
-            title="Settings"
-            icon={<CiSettings />}
-            open={settingsOpen}
-            toggle={() => setSettingsOpen(!settingsOpen)}
-          >
-            <MenuItem
-              label="Profile"
-              active={activeView === "account-details"}
-              onClick={() => {
-                setActiveView("account-details");
-                setSidebarOpen(false);
-              }}
-            />
-          </MenuDropdown>
-        </nav>
-
-        {/* LOGOUT */}
-        <div className="absolute bottom-6 w-full flex justify-center">
-          <button
+        <MenuDropdown
+          title="AMC"
+          icon={<AiOutlinePlusCircle />}
+          open={amcOpen}
+          toggle={() => setAmcOpen(!amcOpen)}
+        >
+          <MenuItem
+            label="Create AMC"
+            active={activeView === "create-amc"}
             onClick={() => {
-              localStorage.clear();
-              window.location.href = "/login";
+              setActiveView("create-amc");
+              setSidebarOpen(false);
             }}
-            className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white"
-          >
-            <BiPowerOff size={22} />
-          </button>
-        </div>
+          />
+        </MenuDropdown>
+
+        <MenuDropdown
+          title="Service"
+          icon={<MdOutlineSettingsAccessibility />}
+          open={serviceOpen}
+          toggle={() => setServiceOpen(!serviceOpen)}
+        >
+          <MenuItem
+            label="Create Service"
+            active={activeView === "create-service"}
+            onClick={() => {
+              setActiveView("create-service");
+              setSidebarOpen(false);
+            }}
+          />
+        </MenuDropdown>
+
+        <MenuDropdown
+          title="Customer Service"
+          icon={<FiUserPlus />}
+          open={customerServiceOpen}
+          toggle={() => setCustomerServiceOpen(!customerServiceOpen)}
+        >
+          <MenuItem
+            label="Create Customer Service"
+            active={activeView === "create-customer-service"}
+            onClick={() => {
+              setActiveView("create-customer-service");
+              setSidebarOpen(false);
+            }}
+          />
+        </MenuDropdown>
+
+        <MenuDropdown
+          title="Settings"
+          icon={<CiSettings />}
+          open={settingsOpen}
+          toggle={() => setSettingsOpen(!settingsOpen)}
+        >
+          <MenuItem
+            label="Profile"
+            active={activeView === "account-details"}
+            onClick={() => {
+              setActiveView("account-details");
+              setSidebarOpen(false);
+            }}
+          />
+        </MenuDropdown>
+      </nav>
+
+      {/* LOGOUT */}
+      <div className="absolute bottom-6 w-full flex justify-center">
+        <button
+          onClick={() => {
+            localStorage.clear();
+            window.location.href = "/login";
+          }}
+          className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white"
+        >
+          <BiPowerOff size={22} />
+        </button>
       </div>
     </aside>
   );
@@ -194,10 +178,10 @@ function MenuItem({ label, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left px-3 py-2 rounded text-sm
+      className={`w-full text-left px-4 py-2 rounded text-sm
       ${active ? "bg-blue-600 text-white" : "hover:bg-gray-700"}`}
     >
       • {label}
     </button>
   );
-}
+} 

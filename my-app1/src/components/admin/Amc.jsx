@@ -1,5 +1,8 @@
 import axios from "axios";
 import { FiEdit, FiTrash2, FiDownload } from "react-icons/fi";
+import { FaFileExcel, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 import { generateAmcPdf } from "./AmcPdf";
 import { useEffect, useState } from "react";
 
@@ -8,6 +11,9 @@ export default function Amc() {
   const [showForm, setShowForm] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [dateError, setDateError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 5;
+
 
   // ACCOUNT DETAILS FOR PDF
   const [account, setAccount] = useState({
@@ -227,6 +233,49 @@ export default function Amc() {
     fetchAmc();
     fetchAccountForPdf();
   }, []);
+   /* ================= PAGINATION ================= */
+
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = amcList.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(amcList.length / rowsPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+  /* ================= EXCEL EXPORT ================= */
+
+  const exportToExcel = () => {
+    const formattedData = amcList.map((a) => ({
+      Name: a.name,
+      Service: a.service_name,
+      Cost: a.service_cost,
+      Advance: a.advance_payment,
+      Balance: a.remaining_balance,
+      Status: a.status,
+      Start_Date: new Date(a.start_date).toLocaleDateString(),
+      End_Date: new Date(a.end_date).toLocaleDateString(),
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "AMC Data");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+     const fileData = new Blob([excelBuffer], {
+      type:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    saveAs(fileData, "AMC_Data.xlsx");
+  };
 
   /* ==================== UI ==================== */
   return (
@@ -358,12 +407,48 @@ export default function Amc() {
                   >
                     <FiDownload size={18} />
                   </button>
+                  <button
+                  onClick={exportToExcel}
+                  className="bg-green-600 text-white px-3 py-1 rounded"
+                >
+                  <FaFileExcel size={16} />
+                </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
+       {/* Pagination Section */}
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button
+          onClick={prevPage}
+          className="bg-gray-300 px-3 py-2 rounded"
+        >
+          <FaArrowLeft />
+        </button>
+
+        {[...Array(totalPages)].map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentPage(index + 1)}
+            className={`px-3 py-1 rounded ${
+              currentPage === index + 1
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200"
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+
+        <button
+          onClick={nextPage}
+          className="bg-gray-300 px-3 py-2 rounded"
+        >
+          <FaArrowRight />
+        </button>
+      </div>
 
       {updateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">

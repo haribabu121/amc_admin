@@ -30,7 +30,7 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="relative flex h-screen overflow-hidden">
+    <div className="relative flex h-screen bg-sky-200 overflow-hidden">
 
      
       {/* Glass overlay for readability */}
